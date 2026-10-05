@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+modeller/
+Ciktilar/
+araclar/
+dist/
+ayarlar.json

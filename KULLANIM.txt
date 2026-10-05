@@ -1,0 +1,52 @@
+FACEBOOK VIDEO -> TURKCE ALTYAZI
+================================
+Video linkindeki (Facebook, YouTube, Instagram, TikTok, X vb.) konusmayi (varsayilan Endonezce) Turkce altyazi
+dosyasina cevirir. Tamamen ucretsiz ve bilgisayarinizda calisir.
+
+KURULUM (bir kez)
+1. Kurulum.bat dosyasina cift tiklayin. Internet gerekir; uv, Python, FFmpeg
+   ve yapay zeka modelleri (toplam yaklasik 7 GB) otomatik indirilir.
+2. "Kurulum tamamlandi" yazisini bekleyin.
+
+KULLANIM
+1. Baslat.bat ile programi acin.
+2. Video linkini yapistirin, dili secin (bilmiyorsaniz "Otomatik algila").
+3. "Cevir" dugmesine basin. 4 adim: indirme, ses ayirma, metne dokme, ceviri.
+4. Bitince klasor otomatik acilir ("Klasoru Ac" dugmesiyle tekrar acabilirsiniz).
+   Ciktilar\<tarih>_<ad>\ icinde:
+     video.mp4          - indirilen video
+     video.orijinal.srt - orijinal dil altyazisi
+     video.tr.srt       - Turkce altyazi
+   Videoyu VLC gibi bir oynaticiyla acarken video.tr.srt dosyasini altyazi
+   olarak ekleyin.
+
+SIK SORUNLAR
+- Site giris istiyorsa / video indirilemiyorsa: "Tarayici cerezlerini
+  kullan" kutusunu isaretleyin, o siteye giris yaptiginiz tarayiciyi secin.
+  (Chrome/Edge aciksa cerezler okunamayabilir; tarayiciyi kapatip deneyin.)
+- Ekran karti (NVIDIA GPU) yoksa islem cok yavas olur; uzun videolar saatler
+  surebilir. GPU varsa cok daha hizlidir.
+- Ilk calistirmada model yukleme biraz zaman alir.
+- "Konusma bulunamadi": dil secimini "Otomatik algila" yapip deneyin.
+
+NOT: Yalnizca kisisel kullanim icindir. Baskasinin icerigini indirirken telif
+haklarina ve ilgili sitenin kullanim sartlarina uyun.
+
+Oynatma listeleri:
+- Yalnizca tek video islenir. Oynatma listesi veya kanal linki girilirse
+  program uyari verir. "watch?v=...&list=..." gibi linklerde sadece o video
+  indirilir.
+
+Guncelleme:
+- Baslat.bat her acilista yt-dlp'yi (video indirici) otomatik gunceller;
+  siteler sik degistigi icin indirme hatalarinin cogu boylece onlenir.
+  Internet yoksa bu adim atlanir, program yine acilir.
+- Diger kutuphaneler uv.lock ile sabittir, kendiliginden degismez.
+- Guncelle.bat: en son surumu GitHub'dan indirir, programin kodunu ve
+  uv.lock dosyasini gunceller, kutuphaneleri esitler, yt-dlp'yi yeniler.
+  Ciktilar, modeller ve ayarlariniz silinmez. Indirme hatasi alirsaniz once
+  bunu calistirin.
+- Elle guncelleme: yeni FB-Ceviri.zip dosyasini indirip klasorun uzerine
+  cikarin (yalnizca kod icerir; videolariniz ve ayarlariniz ezilmez), sonra
+  Guncelle.bat calistirin.
+- Dil, motor ve tarayici secimleriniz ayarlar.json dosyasinda saklanir.
