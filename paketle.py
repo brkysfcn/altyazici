@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Gelistirici araci: GitHub Release icin dist/FB-Ceviri.zip uretir.
+"""Gelistirici araci: GitHub Release icin dist/Altyazici.zip uretir.
 
 Kullanim:  uv run python paketle.py 0.3.0     (surum.txt de guncellenir)
            uv run python paketle.py           (mevcut surum.txt ile paketler)
@@ -11,8 +11,8 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DOSYALAR = ["Baslat.bat", "Kurulum.bat", "Guncelle.bat", "KULLANIM.txt",
-            "pyproject.toml", "uv.lock", "surum.txt", "guncelleme.txt"]
+DOSYALAR = ["Baslat.bat", "Kurulum.bat", "Guncelle.bat", "Kaldir.bat", "KULLANIM.txt",
+            "pyproject.toml", "uv.lock", "surum.txt", "guncelleme.txt", ".python-version"]
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
               "Guncelle.bat calismaz.")
     cikti = ROOT / "dist"
     cikti.mkdir(exist_ok=True)
-    zip_yolu = cikti / "FB-Ceviri.zip"
+    zip_yolu = cikti / "Altyazici.zip"
     with zipfile.ZipFile(zip_yolu, "w", zipfile.ZIP_DEFLATED) as z:
         for ad in DOSYALAR:
             z.write(ROOT / ad, ad)

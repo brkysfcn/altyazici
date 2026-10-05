@@ -1,5 +1,5 @@
-FACEBOOK VIDEO -> TURKCE ALTYAZI
-================================
+ALTYAZICI - VIDEO LINKINDEN TURKCE ALTYAZI
+==========================================
 Video linkindeki (Facebook, YouTube, Instagram, TikTok, X vb.) konusmayi (varsayilan Endonezce) Turkce altyazi
 dosyasina cevirir. Tamamen ucretsiz ve bilgisayarinizda calisir.
 
@@ -46,7 +46,14 @@ Guncelleme:
   uv.lock dosyasini gunceller, kutuphaneleri esitler, yt-dlp'yi yeniler.
   Ciktilar, modeller ve ayarlariniz silinmez. Indirme hatasi alirsaniz once
   bunu calistirin.
-- Elle guncelleme: yeni FB-Ceviri.zip dosyasini indirip klasorun uzerine
+- Elle guncelleme: yeni Altyazici.zip dosyasini indirip klasorun uzerine
   cikarin (yalnizca kod icerir; videolariniz ve ayarlariniz ezilmez), sonra
   Guncelle.bat calistirin.
 - Dil, motor ve tarayici secimleriniz ayarlar.json dosyasinda saklanir.
+
+Kaldirma:
+- Kaldir.bat programi bilgisayardan temizler. Her adimda onay sorar:
+  1) .venv, modeller (~7 GB), araclar, ayarlar  2) Ciktilar (videolariniz;
+  ayri sorulur, onerilen cevap H)  3) uv ve Python 3.12 (yalnizca Kurulum.bat
+  kendisi kurduysa)  4) program klasorunun kendisi.
+- Ciktilar klasorunu silmezseniz program klasoru de silinmez.

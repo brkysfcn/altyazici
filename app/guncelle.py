@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 KORUNAN = ("ciktilar/", "modeller/", "araclar/", ".venv/", "ayarlar.json")
-ZIP_ADI = "FB-Ceviri.zip"
+ZIP_ADI = "Altyazici.zip"
 
 
 def depo_adi():
@@ -22,7 +22,7 @@ def depo_adi():
     if "BURAYA" in ad or not re.fullmatch(r"[\w.-]+/[\w.-]+", ad):
         raise SystemExit(
             "HATA: guncelleme.txt icinde GitHub deposu 'sahip/depo' biciminde yazili degil.\n"
-            "Ornek: ahmet/fb-ceviri")
+            "Ornek: ahmet/altyazici")
     return ad
 
 
@@ -34,7 +34,7 @@ def yerel_surum():
 def indir(depo):
     url = f"https://github.com/{depo}/releases/latest/download/{ZIP_ADI}"
     print(f"Indiriliyor: {url}")
-    req = urllib.request.Request(url, headers={"User-Agent": "FB-Ceviri-Guncelle"})
+    req = urllib.request.Request(url, headers={"User-Agent": "Altyazici-Guncelle"})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             return r.read()

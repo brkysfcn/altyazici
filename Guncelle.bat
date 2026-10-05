@@ -2,7 +2,10 @@
 setlocal
 cd /d "%~dp0"
 set "PATH=%USERPROFILE%\.local\bin;%PATH%"
-echo === Video Ceviri - Guncelle ===
+rem Sistemde baska Python olsa bile yalnizca uv nin kendi Python 3.12 si kullanilir.
+set "UV_PYTHON=3.12"
+set "UV_PYTHON_PREFERENCE=only-managed"
+echo === Altyazici - Guncelle ===
 where uv >nul 2>nul
 if errorlevel 1 (
   echo HATA: uv bulunamadi. Once Kurulum.bat dosyasini calistirin.

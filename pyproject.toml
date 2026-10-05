@@ -1,6 +1,6 @@
 [project]
-name = "fb-ceviri"
-version = "0.1.0"
+name = "altyazici"
+version = "0.3.0"
 requires-python = ">=3.12"
 dependencies = [
     "av<16",

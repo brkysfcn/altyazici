@@ -32,7 +32,7 @@ def _ayar_oku():
 class Uygulama(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Video Türkçe Altyazı")
+        self.title("Altyazıcı - Video Türkçe Altyazı")
         self.geometry("760x560")
         self.minsize(620, 440)
         self.kuyruk = queue.Queue()

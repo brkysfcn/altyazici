@@ -1,4 +1,4 @@
-"""Facebook video -> Turkce altyazi (Endonezce konusma). Tamamen yerel ve ucretsiz."""
+"""Altyazici: video linkinden Turkce altyazi (Endonezce konusma). Tamamen yerel ve ucretsiz."""
 import os
 import re
 import sys

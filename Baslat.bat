@@ -2,6 +2,9 @@
 cd /d "%~dp0"
 set HF_HUB_DISABLE_SYMLINKS_WARNING=1
 set "PATH=%USERPROFILE%\.local\bin;%PATH%"
+rem Sistemde baska Python olsa bile yalnizca uv nin kendi Python 3.12 si kullanilir.
+set "UV_PYTHON=3.12"
+set "UV_PYTHON_PREFERENCE=only-managed"
 where uv >nul 2>nul
 if errorlevel 1 goto kurulum
 if not exist ".venv" goto kurulum
