@@ -1,6 +1,10 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+rem Ciktiyi hem ekranda goster hem loglar\guncelle.log dosyasina yaz.
+if not defined ALTYAZICI_TEE if exist "%~dp0app\kayitli.ps1" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0app\kayitli.ps1" -Bat "%~f0" -Log "%~dp0loglar\guncelle.log" & exit /b
+)
 set "PATH=%USERPROFILE%\.local\bin;%PATH%"
 rem Sistemde baska Python olsa bile yalnizca uv nin kendi Python 3.12 si kullanilir.
 set "UV_PYTHON=3.12"

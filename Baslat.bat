@@ -10,7 +10,8 @@ if errorlevel 1 goto kurulum
 if not exist ".venv" goto kurulum
 if not exist "araclar\ffmpeg.exe" goto kurulum
 echo yt-dlp guncelleniyor (internet yoksa atlanir)...
-uv pip install --quiet --upgrade yt-dlp >nul 2>nul
+if not exist "loglar" mkdir "loglar"
+uv pip install --quiet --upgrade yt-dlp >> "loglar\baslat.log" 2>&1
 start "" uv run --no-sync pythonw app\gui.py
 exit /b 0
 :kurulum

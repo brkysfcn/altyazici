@@ -5,7 +5,11 @@ import sys
 import glob
 import shutil
 import subprocess
+import time
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import gunluk  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 ARAC = ROOT / "araclar"
@@ -62,13 +66,28 @@ def guvenli_ad(s, n=60):
 
 # ---------------------------------------------------------------- indirme
 def indir(url, klasor, log=print, tarayici_cerezi=None):
+    """Indirir. Tarayici cerezleri okunamazsa (ornegin Chrome aciksa) cerezsiz yeniden dener:
+    herkese acik videolar cerez gerektirmez, cerez secenegi indirmeyi bozmamali."""
+    import yt_dlp
+    try:
+        return _indir_dene(url, klasor, log, tarayici_cerezi)
+    except yt_dlp.utils.DownloadError as ex:
+        if tarayici_cerezi and "cookie" in str(ex).lower():
+            gunluk.log().warning("Cerezler okunamadi (%s); cerezsiz yeniden deneniyor.", tarayici_cerezi)
+            log(f"  {tarayici_cerezi} cerezleri okunamadi (tarayici acik olabilir); cerezsiz deneniyor...")
+            return _indir_dene(url, klasor, log, None)
+        raise
+
+
+def _indir_dene(url, klasor, log, tarayici_cerezi):
     import yt_dlp
     klasor.mkdir(parents=True, exist_ok=True)
     opts = {
         "outtmpl": str(klasor / "video.%(ext)s"),
         "format": "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b",
         "merge_output_format": "mp4",
-        "quiet": True, "no_warnings": True, "noplaylist": True, "noprogress": True,
+        "quiet": True, "noplaylist": True, "noprogress": True,
+        "verbose": True, "logger": gunluk.YtdlpGunluk(),  # ekrana degil, gunluge yazar
         "extract_flat": "in_playlist",  # listeyi acmadan yalnizca liste mi diye bakar
         "ffmpeg_location": str(ARAC),
         "progress_hooks": [lambda d: d["status"] == "downloading" and log(
@@ -162,7 +181,8 @@ def _nllb_yukle(log):
                                         compute_type="int8_float16" if gpu else "int8")
             return tr, yol
         except Exception as ex:
-            log(f"  {repo} yuklenemedi ({type(ex).__name__}); daha kucuk model deneniyor...")
+            gunluk.log().exception("NLLB modeli yuklenemedi: %s", repo)
+            log(f"  {repo} yuklenemedi ({type(ex).__name__}: {ex}); daha kucuk model deneniyor...")
     raise RuntimeError("NLLB modeli yuklenemedi.")
 
 
@@ -306,6 +326,29 @@ def bol_ve_yaz(yol, gruplar, metinler, uz=42, satir=2):
 
 # ---------------------------------------------------------------- ana akis
 def isle(url, log=print, tarayici_cerezi=None, dil=VARSAYILAN_DIL, motor="nllb"):
+    """Tum is akisi; her adimi ve hatayi loglar/altyazici.log dosyasina da yazar."""
+    gunluk.kur()
+    gunluk.oturum_basligi()
+    lg = gunluk.log()
+
+    def kayitli(m="", end="\n", **_):
+        if end != "\r":  # ilerleme yuzdesi satirlari gunluge yazilmaz
+            lg.info(str(m).strip())
+        log(m, end=end)
+
+    lg.info("ISLEM BASLADI url=%s dil=%s motor=%s cerez=%s", url, dil, motor,
+            tarayici_cerezi or "yok")
+    t0 = time.perf_counter()
+    try:
+        sonuc = _isle(url, kayitli, tarayici_cerezi, dil, motor)
+    except BaseException:
+        lg.exception("ISLEM BASARISIZ (%.1f sn)", time.perf_counter() - t0)
+        raise
+    lg.info("ISLEM TAMAMLANDI (%.1f sn) -> %s", time.perf_counter() - t0, sonuc)
+    return sonuc
+
+
+def _isle(url, log, tarayici_cerezi, dil, motor):
     from datetime import date
     gecici = CIKTI / "_gecici"
     if gecici.exists():
@@ -332,6 +375,7 @@ def isle(url, log=print, tarayici_cerezi=None, dil=VARSAYILAN_DIL, motor="nllb")
     wav.unlink(missing_ok=True)
     if not segs:
         raise RuntimeError("Videoda konusma bulunamadi.")
+    log(f"  {len(segs)} konusma parcasi bulundu (dil: {algilanan})")
     srt_yaz(hedef / "video.orijinal.srt", segs, [t for _, _, t in segs])
 
     log("4/4 Turkceye cevriliyor...")

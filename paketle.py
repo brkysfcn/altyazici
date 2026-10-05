@@ -3,7 +3,7 @@
 
 Kullanim:  uv run python paketle.py 0.3.0     (surum.txt de guncellenir)
            uv run python paketle.py           (mevcut surum.txt ile paketler)
-Pakete girmeyenler: Ciktilar, modeller, araclar, .venv, ayarlar.json, dist
+Pakete girmeyenler: Ciktilar, modeller, araclar, .venv, loglar, ayarlar.json, dist
 """
 import re
 import sys
@@ -29,8 +29,9 @@ def main():
     with zipfile.ZipFile(zip_yolu, "w", zipfile.ZIP_DEFLATED) as z:
         for ad in DOSYALAR:
             z.write(ROOT / ad, ad)
-        for p in sorted((ROOT / "app").glob("*.py")):
-            z.write(p, f"app/{p.name}")
+        for desen in ("*.py", "*.ps1"):
+            for p in sorted((ROOT / "app").glob(desen)):
+                z.write(p, f"app/{p.name}")
     print(f"Hazir: {zip_yolu}  (surum {surum}, {zip_yolu.stat().st_size // 1024} KB)")
 
 

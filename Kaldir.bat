@@ -13,7 +13,7 @@ echo.
 echo Program klasoru: %DIR%
 echo.
 echo Bu islem asagidakileri sirayla soracaktir; her adimda onay istenir:
-echo   1) Kurulu bilesenler: .venv, modeller (~7 GB), araclar, ayarlar
+echo   1) Kurulu bilesenler: .venv, modeller (~7 GB), araclar, loglar, ayarlar
 echo   2) Ciktilar klasoru (VIDEO VE ALTYAZILARINIZ) - ayri sorulur
 echo   3) uv ve Python 3.12 (yalnizca Kurulum.bat kurduysa)
 echo   4) Program klasorunun kendisi
@@ -28,7 +28,7 @@ if errorlevel 2 (
 rem ---------- 1) Kurulu bilesenler
 echo.
 echo [1/4] Kurulu bilesenler:
-for %%D in (.venv modeller araclar dist) do if exist "%%D" (
+for %%D in (.venv modeller araclar dist loglar) do if exist "%%D" (
   for /f %%S in ('powershell -NoProfile -Command "[math]::Round((Get-ChildItem -LiteralPath '%DIR%\%%D' -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum/1MB)"') do echo     %%D  - %%S MB
 )
 if exist "ayarlar.json" echo     ayarlar.json
@@ -36,7 +36,7 @@ choice /c EH /n /m "Bunlar silinsin mi? (E/H): "
 if errorlevel 2 (
   echo     Atlandi.
 ) else (
-  for %%D in (.venv modeller araclar dist) do if exist "%%D" rmdir /s /q "%%D"
+  for %%D in (.venv modeller araclar dist loglar) do if exist "%%D" rmdir /s /q "%%D"
   if exist "ayarlar.json" del /q "ayarlar.json"
   if exist "app\__pycache__" rmdir /s /q "app\__pycache__"
   echo     Silindi.

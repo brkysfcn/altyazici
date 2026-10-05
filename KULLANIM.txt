@@ -57,3 +57,11 @@ Kaldirma:
   ayri sorulur, onerilen cevap H)  3) uv ve Python 3.12 (yalnizca Kurulum.bat
   kendisi kurduysa)  4) program klasorunun kendisi.
 - Ciktilar klasorunu silmezseniz program klasoru de silinmez.
+
+Sorun bildirme:
+- Programda sorun yasarsaniz "Sorun Raporu Olustur" dugmesine basin. Masaustunde
+  Altyazici-rapor-<tarih>.zip olusur; bu dosyayi gelistiriciye gonderin.
+- Rapor video dosyasi icermez; indirdiginiz video linklerini ve basliklarini
+  icerebilir. Windows kullanici adiniz gizlenir.
+- "Gunlugu Ac" dugmesi loglar\altyazici.log dosyasini acar. Kurulum sirasinda
+  sorun olursa loglar\kurulum.log dosyasini gonderin.

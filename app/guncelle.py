@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """GitHub'daki en son surumu indirip kodu gunceller.
 
-Dokunulmayanlar: Ciktilar, modeller, araclar, .venv, ayarlar.json
+Dokunulmayanlar: Ciktilar, modeller, araclar, .venv, loglar, ayarlar.json
 Guncelle.bat calisirken kendi uzerine yazilamayacagi icin Guncelle.bat.yeni olarak birakilir.
 """
 import io
@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-KORUNAN = ("ciktilar/", "modeller/", "araclar/", ".venv/", "ayarlar.json")
+KORUNAN = ("ciktilar/", "modeller/", "araclar/", ".venv/", "loglar/", "ayarlar.json")
 ZIP_ADI = "Altyazici.zip"
 
 

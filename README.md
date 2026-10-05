@@ -23,6 +23,7 @@ Konuşma tanıma ve çeviri **bilgisayarınızda yerel olarak** çalışır. Hes
 - [Güncelleme](#güncelleme)
 - [Kaldırma](#kaldırma)
 - [Sorun giderme](#sorun-giderme)
+- [Sorun bildirme (günlük ve rapor)](#sorun-bildirme-günlük-ve-rapor)
 - [Proje yapısı](#proje-yapısı)
 - [Kullanılan teknolojiler ve lisanslar](#kullanılan-teknolojiler-ve-lisanslar)
 - [Yasal uyarı](#yasal-uyarı)
@@ -36,6 +37,7 @@ Konuşma tanıma ve çeviri **bilgisayarınızda yerel olarak** çalışır. Hes
 - **Ekran kartı desteği:** NVIDIA ekran kartı otomatik algılanır ve kullanılır; yoksa işlemciyle çalışır.
 - **Çeviri motoru seçimi:** Varsayılan yerel NLLB; isteğe bağlı Google Translate (internet gerekir, hız sınırına takılabilir; takılırsa otomatik NLLB'ye geçer).
 - **Otomatik bakım:** İndirici (yt-dlp) her açılışta güncellenir; diğer kütüphaneler `uv.lock` ile sabittir. `Guncelle.bat` ile program kodu da güncellenir.
+- **Günlük ve sorun raporu:** Her adım ve hata kaydedilir; tek tuşla geliştiriciye gönderilebilecek bir rapor üretilir.
 - **Temiz kaldırma:** `Kaldir.bat` kurulan her şeyi adım adım onay isteyerek temizler.
 - **Sistem Python'una dokunmaz:** Kendi izole Python 3.12 ortamını kullanır; bilgisayarınızda başka bir Python olsa bile etkilenmez.
 
@@ -136,13 +138,13 @@ Altyazıcı yerel ve ücretsiz modeller kullandığı için çıktı insan çevi
 | **Otomatik** | `Guncelle.bat` en son sürümü GitHub'dan indirir; kodu ve `uv.lock` dosyasını günceller, kütüphaneleri eşitler, yt-dlp'yi yeniler. |
 | **Elle** | Yeni `Altyazici.zip` dosyasını indirip klasörün üzerine çıkarın, ardından `Guncelle.bat` çalıştırın. |
 
-Güncelleme **videolarınıza (`Ciktilar`), modellere, FFmpeg'e ve ayarlarınıza dokunmaz.** `Baslat.bat` ayrıca her açılışta yalnızca yt-dlp'yi günceller (internet yoksa atlar).
+Güncelleme **videolarınıza (`Ciktilar`), modellere, FFmpeg'e, günlüklere ve ayarlarınıza dokunmaz.** `Baslat.bat` ayrıca her açılışta yalnızca yt-dlp'yi günceller (internet yoksa atlar).
 
 ## Kaldırma
 
 `Kaldir.bat` her adımda onay isteyerek şunları temizler:
 
-1. Kurulu bileşenler: `.venv`, `modeller` (~7 GB), `araclar`, ayarlar
+1. Kurulu bileşenler: `.venv`, `modeller` (~7 GB), `araclar`, `loglar`, ayarlar
 2. `Ciktilar` (videolarınız; **ayrı sorulur**, önerilen cevap *Hayır*)
 3. uv ve Python 3.12 (yalnızca `Kurulum.bat` kendisi kurduysa)
 4. Program klasörünün kendisi
@@ -158,7 +160,30 @@ Sistemdeki mevcut Python kurulumunuza dokunulmaz.
 | "Videoda konuşma bulunamadı" | Video müzik/sessizlik ağırlıklıdır ya da dil seçimi yanlıştır; *Otomatik algıla*yı deneyin. |
 | Ekran kartı belleği yetersiz | Çeviri sırasında oyun, video düzenleme gibi ağır programları kapatın. |
 | Google çevirisi çalışmıyor | Hız sınırı olabilir; program otomatik yerel NLLB'ye geçer ya da motoru elle NLLB yapın. |
+| Başka bir sorun | **Sorun Raporu Oluştur** düğmesiyle rapor hazırlayıp geliştiriciye gönderin ([ayrıntılar](#sorun-bildirme-günlük-ve-rapor)). |
 | Kurulum yarıda kesildi | `Kurulum.bat` dosyasını tekrar çalıştırın; indirilen dosyalar çoğunlukla korunur ve kaldığı yerden devam eder. |
+
+## Sorun bildirme (günlük ve rapor)
+
+Program her çalıştığında ne yaptığını **günlük dosyasına** yazar. Bir sorun yaşarsanız geliştiriciye göndereceğiniz tek şey bir rapor dosyasıdır.
+
+**Rapor nasıl oluşturulur**
+
+1. Programın altındaki **Sorun Raporu Oluştur** düğmesine basın.
+2. Masaüstünde `Altyazici-rapor-<tarih>.zip` dosyası oluşur ve Dosya Gezgini'nde seçili açılır.
+3. Bu dosyayı geliştiriciye gönderin.
+
+**Raporun içi**
+
+| Dosya | İçeriği |
+|---|---|
+| `sistem_bilgisi.txt` | Windows ve Python sürümü, ekran kartı ve sürücü, RAM, boş disk, kütüphane sürümleri, FFmpeg, model boyutları, ayarlar |
+| `loglar/altyazici.log` | Program günlüğü: her adım, süreler, tam hata izi, yt-dlp ve Whisper mesajları |
+| `loglar/kurulum.log`, `guncelle.log`, `baslat.log` | `Kurulum.bat`, `Guncelle.bat` ve `Baslat.bat` çıktıları (varsa) |
+
+**Gizlilik:** Rapor **video dosyalarını içermez.** Ancak indirdiğiniz video **linklerini ve başlıklarını** içerebilir; göndermeden önce bunu göz önünde bulundurun. Windows kullanıcı adınız (`C:\Users\<ad>`) rapordan otomatik olarak `%USERPROFILE%` ile değiştirilir. Program çerez içeriklerini ve parolaları günlüğe yazmaz (yalnızca seçtiğiniz tarayıcının adı kaydedilir).
+
+**Günlükleri elle bulmak:** **Günlüğü Aç** düğmesi `loglar\altyazici.log` dosyasını açar. Kurulum sırasında program açılamıyorsa `loglar` klasörünü doğrudan program klasöründe bulabilirsiniz. Günlük dosyası 1 MB'ta döner (en fazla 4 dosya), yani disk alanını doldurmaz.
 
 ## Proje yapısı
 
@@ -168,6 +193,7 @@ altyazici/
 ├── Baslat.bat         programı açar (yt-dlp'yi günceller)
 ├── Guncelle.bat       kod + kütüphane güncelleme
 ├── Kaldir.bat         kaldırma
+├── loglar/            günlükler (otomatik oluşur)
 ├── KULLANIM.txt       kısa kullanım kılavuzu
 ├── pyproject.toml     bağımlılıklar
 ├── uv.lock            sabitlenmiş sürümler
@@ -176,6 +202,8 @@ altyazici/
 └── app/
     ├── gui.py             Tkinter arayüzü
     ├── cevir_core.py      indirme, konuşma tanıma, çeviri, SRT
+    ├── gunluk.py          günlük ve sorun raporu
+    ├── kayitli.ps1        kurulum/güncelleme çıktısını log'a da yazar
     ├── guncelle.py        GitHub'dan güncelleme
     └── modelleri_indir.py kurulumda model indirme
 ```

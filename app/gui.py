@@ -14,6 +14,8 @@ APP_DIR = Path(__file__).resolve().parent
 if str(APP_DIR) not in sys.path:
     sys.path.insert(0, str(APP_DIR))
 
+import gunluk  # noqa: E402
+
 MOTORLAR = [("Yerel NLLB (internetsiz, ücretsiz)", "nllb"), ("Google (internet gerekir, sınırlı)", "google")]
 DILLER = [("Endonezce", "id"), ("Otomatik algıla", "auto"), ("Hintçe", "hi"),
           ("İngilizce", "en"), ("Malayca", "ms")]
@@ -99,8 +101,34 @@ class Uygulama(tk.Tk):
         alt.pack(fill="x", pady=(6, 0))
         self.ac = ttk.Button(alt, text="Klasörü Aç", command=self._klasor_ac, state="disabled")
         self.ac.pack(side="right")
+        ttk.Button(alt, text="Sorun Raporu Oluştur", command=self._rapor).pack(side="left")
+        ttk.Button(alt, text="Günlüğü Aç", command=self._gunluk_ac).pack(side="left", padx=(6, 0))
 
     # ---- yardimcilar
+    def _gunluk_ac(self):
+        try:
+            if gunluk.LOG_FILE.exists():
+                os.startfile(str(gunluk.LOG_FILE))
+            else:
+                messagebox.showinfo("Günlük", "Henüz günlük dosyası yok.")
+        except Exception as e:
+            messagebox.showerror("Günlük", f"Günlük açılamadı: {e}")
+
+    def _rapor(self):
+        try:
+            yol = gunluk.rapor_olustur()
+        except Exception as e:
+            gunluk.log().exception("Rapor olusturulamadi")
+            messagebox.showerror("Sorun raporu", f"Rapor oluşturulamadı: {e}")
+            return
+        gunluk.klasoru_goster(yol)
+        messagebox.showinfo(
+            "Sorun raporu hazır",
+            f"Rapor masaüstüne kaydedildi:\n{yol.name}\n\n"
+            "Bu dosyayı geliştiriciye gönderin.\n\n"
+            "Rapor video dosyası içermez; indirdiğiniz video linklerini ve başlıklarını "
+            "içerebilir. Kullanıcı adınız gizlenmiştir.")
+
     def _yapistir(self):
         try:
             self.url.set(self.clipboard_get().strip())
@@ -175,6 +203,7 @@ class Uygulama(tk.Tk):
         self.log.configure(state="disabled")
         self._satir_guncelle = False
         self._ayar_kaydet()
+        gunluk.log().info("Arayuz: Cevir'e basildi (dil=%s, motor=%s)", kod, motor)
         threading.Thread(target=self._calis, args=(url, cerez, kod, motor), daemon=True).start()
 
     def _calis(self, url, cerez, kod, motor):
@@ -217,7 +246,8 @@ class Uygulama(tk.Tk):
         self._son()
         self.adim_etiket.configure(text="Hata oluştu.")
         self.hata.configure(text=f"Hata: {mesaj or 'Bilinmeyen hata'}\n"
-                                 "Site giriş istiyorsa 'Tarayıcı çerezlerini kullan' seçeneğini deneyin.")
+                                 "Giriş gerektiren videolarda 'Tarayıcı çerezlerini kullan' seçeneğini açın (tarayıcıyı kapatmanız gerekebilir); gerekmeyen videolarda kapalı bırakın.\n"
+                                 "Sorun sürerse 'Sorun Raporu Oluştur' düğmesiyle rapor hazırlayıp gönderin.")
         self.log.configure(state="normal")
         self.log.insert("end", "\n" + ayrinti, "hata")
         self.log.see("end")
@@ -232,4 +262,6 @@ class Uygulama(tk.Tk):
 
 
 if __name__ == "__main__":
+    gunluk.kur()
+    gunluk.oturum_basligi()
     Uygulama().mainloop()
